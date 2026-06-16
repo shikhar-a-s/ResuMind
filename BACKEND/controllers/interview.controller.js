@@ -2,32 +2,54 @@ const pdfParse= require('pdf-parse');
 const generateInterviewReport = require('../src/services/ai.services');
 const interviewReportModel = require('../models/interviewReport');
 const { authUser } = require('../middlewares/auth.middleware');
+ function cleanResumeText(text) {
+  const lines = text.split("\n");
+
+  return lines.map(line => {
+    const words = line.split(/\s+/);
+    const seen = new Set();
+
+    return words.filter(word => {
+      const isRepeatedToken =
+        word.includes("@") ||
+        word.includes("github.com") ||
+        word.includes("linkedin.com");
+
+      if (!isRepeatedToken) return true;
+
+      if (seen.has(word)) return false;
+
+      seen.add(word);
+      return true;
+    }).join(" ");
+  }).join("\n");
+}
 async function generateInterviewReportController(req,res){
-        const resumeFile = req.file;
         if (!req.file) {
         return res.status(400).json({
                 message: "Resume file is required"
         });
 }
         const resumeContent = await (new pdfParse.PDFParse(Uint8Array.from(req.file.buffer))).getText();
+        console.log(resumeContent.text);
+const rawText = resumeContent.text;
+const cleanedText = cleanResumeText(rawText);
+
+
+console.log("RAW TEXT:");
+console.log(rawText);
+
+console.log("CLEANED TEXT:");
+console.log(cleanedText);
         const { selfDescription, jobDescription } = req.body;
         const interviewReportByAi = await generateInterviewReport({
-                resumeText: resumeContent.text,
+                resumeText: cleanedText,
                 selfDescription,
                 jobDescription
         });
-
-
-console.log(
-    JSON.stringify(interviewReportByAi, null, 2)
-);
-
-console.log("AI RESPONSE:");
-console.dir(interviewReportByAi, { depth: null });
-
 const interviewReport = await interviewReportModel.create({
     user: req.user.id,
-    resumeText: resumeContent.text,
+    resumeText: cleanedText,
     selfDescription,
     jobDescription,
     ...interviewReportByAi
@@ -52,7 +74,6 @@ async function getLatestInterviewReportController(req, res) {
         }
 }
 
-module.exports = { generateInterviewReportController, getLatestInterviewReportController };
 async function getUserReportsController(req, res) {
         try {
                 const userId = req.user._id || req.user.id;
