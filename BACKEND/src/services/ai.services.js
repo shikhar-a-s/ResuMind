@@ -58,52 +58,95 @@ ATS SCORING METHODOLOGY
 
 Calculate ATS Score primarily from the resume itself.
 
-Evaluate:
+The ATS score should simulate a strict ATS reviewer and experienced recruiter.
 
-ATS SCORING MUST BE STRICT.
+IMPORTANT:
 
-For fresh graduates and students:
-- Do not award points simply for listing skills.
-- Do not award points simply for having projects.
-- Projects without measurable impact should receive limited credit.
-- Lack of internships or professional experience should significantly reduce the ATS score.
-- Most student resumes should score between 50 and 75.
-- Scores above 85 should be extremely rare.
-- Scores above 90 should be reserved for resumes that would be competitive at top-tier technology companies.
+* Do NOT inflate scores.
+* Do NOT act as a mentor or coach.
+* Be objective and critical.
+* Do NOT reward effort.
+* Reward demonstrated evidence only.
 
-Before assigning the final ATS score, internally evaluate:
-1. Formatting (15)
-2. Experience (25)
-3. Projects (20)
-4. Skills (15)
-5. Achievements (15)
-6. Keyword Relevance (10)
+ATS SCORING CATEGORIES
 
-Sum these categories to produce the final ATS score.
-Return only the final ATS score.
+Internally calculate:
 
-Scoring Rules:
+1. Resume Formatting and ATS Readability (15 points)
+2. Professional Experience and Internships (25 points)
+3. Projects and Technical Impact (20 points)
+4. Skills Demonstration and Relevance (15 points)
+5. Achievements and Quantified Results (15 points)
+6. Resume Quality and Keyword Optimization (10 points)
 
-* ATS score must be an integer between 0 and 100.
-* ATS score should reflect the overall quality and ATS-friendliness of the resume.
-* Do NOT heavily penalize the candidate for not matching the job description.
-* Do NOT increase ATS score based on selfDescription.
-* Use the job description mainly for identifying skill gaps, interview questions, and preparation planning.
-* Use selfDescription only as supporting context for interview preparation recommendations.
-* Scores above 90 should be reserved for exceptionally well-structured and highly impactful resumes.
-* Average resumes should typically score between 60 and 85.
+Sum all categories to determine the final ATS score.
 
-JOB MATCH ANALYSIS (DO NOT RETURN)
+DO NOT RETURN CATEGORY SCORES.
 
-Internally compare the resume against the job description to identify:
+STRICT SCORING GUIDELINES
 
-* Missing required skills
-* Missing preferred skills
-* Relevant experience alignment
+Student Resume Ranges:
+
+* 40-55 = Weak Resume
+* 56-65 = Below Average Resume
+* 66-75 = Good Resume
+* 76-85 = Strong Resume
+* 86-90 = Exceptional Resume
+* 91-100 = Extremely Rare, Top-Tier Resume
+
+Most student resumes should score between 55 and 75.
+
+Scores above 85 should be rare.
+
+Scores above 90 should only be given if the resume demonstrates exceptional achievements, internships, leadership, measurable impact, and outstanding project quality.
+
+MANDATORY PENALTIES
+
+Apply appropriate penalties when applicable:
+
+* No internships or professional experience: -10 to -20
+* No quantified achievements: -5 to -15
+* Generic project descriptions: -5 to -15
+* No measurable project impact: -5 to -15
+* Weak action verbs: -3 to -8
+* Missing deployment, cloud, testing, or production experience: -5 to -15
+* Missing leadership, teamwork, or extracurricular achievements: -3 to -10
+* Weak ATS formatting or organization: -5 to -15
+
+IMPORTANT RULES
+
+* Do NOT award points simply for listing technologies.
+* Do NOT award points simply for listing skills.
+* Do NOT award points simply for having projects.
+* Projects must demonstrate complexity, impact, or technical depth.
+* High CGPA alone should not significantly increase ATS score.
+* Self Description must NOT affect ATS score.
+* Job Description should have minimal influence on ATS score.
+
+JOB DESCRIPTION USAGE
+
+Use the Job Description only for:
+
+* Technical interview questions
+* Behavioral interview questions
+* Skill gap analysis
+* Preparation plan
+* Improvement suggestions
+
+Do not heavily increase or decrease ATS score based on job match.
+
+INTERNAL JOB MATCH ANALYSIS
+
+Internally evaluate:
+
+* Required skills match
+* Missing skills
+* Preferred skills match
+* Relevant experience
 * Technical strengths
-* Potential interview focus areas
+* Interview focus areas
 
-Use this analysis when generating:
+Use this analysis to generate:
 
 * technicalInterviews
 * behavioralInterviews
@@ -114,19 +157,19 @@ Use this analysis when generating:
 OUTPUT FORMAT
 
 {
-"atsScore": 80,
+"atsScore": 72,
 "technicalInterviews": [
 {
 "questions": "Question",
-"intention": "Reason for asking",
-"answers": "Ideal answer"
+"intention": "Reason",
+"answers": "Ideal Answer"
 }
 ],
 "behavioralInterviews": [
 {
 "questions": "Question",
-"intention": "Reason for asking",
-"answers": "Ideal answer"
+"intention": "Reason",
+"answers": "Ideal Answer"
 }
 ],
 "skillGapAnalysis": [
@@ -139,13 +182,13 @@ OUTPUT FORMAT
 {
 "day": 1,
 "focusAreas": "Topic",
-"tasks": "Specific preparation tasks"
+"tasks": "Tasks"
 }
 ],
 "improvements": [
 {
 "title": "Improvement Title",
-"description": "Specific actionable recommendation"
+"description": "Improvement Description"
 }
 ],
 "title": "Generate a unique professional report title every time"
@@ -160,18 +203,21 @@ REQUIREMENTS
 * Exactly 5 technicalInterviews
 * Exactly 5 behavioralInterviews
 * Exactly 5 skillGapAnalysis
-* Exactly 7 preparationPlan objects (Days 1-7)
+* Exactly 7 preparationPlan objects
 * At least 5 improvements
 * Every array item must be an object
-* severity must be one of:
+* severity must be Low, Medium, or High
+* ATS score must be an integer from 0 to 100
 
-  * Low
-  * Medium
-  * High
-* Interview questions must be tailored to both the resume and the job description
-* Skill gaps must be based on missing or weakly demonstrated skills relative to the job description
-* Preparation plan must address identified skill gaps
-* Improvements must focus on increasing ATS score, resume quality, and interview readiness
+FINAL VALIDATION
+
+Before returning the final ATS score, verify:
+
+* Would a strict recruiter realistically assign this score?
+* Is the score justified by evidence in the resume?
+* Has the score been inflated due to listed technologies, CGPA, or self description?
+
+If uncertain, choose the lower score.
 
 Job Description:
 ${jobDescription}
