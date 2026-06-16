@@ -22,9 +22,6 @@ console.log(
     JSON.stringify(interviewReportByAi, null, 2)
 );
 
-console.log("AI RESPONSE:");
-console.dir(interviewReportByAi, { depth: null });
-
 const interviewReport = await interviewReportModel.create({
     user: req.user.id,
     resumeText: resumeContent.text,
