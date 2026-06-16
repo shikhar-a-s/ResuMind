@@ -1,6 +1,13 @@
 /* Interview report layout animations and fixed table scrolling */
-.ir-table-wrap{max-height:calc(100vh - 180px);overflow:hidden}
-.ir-column{height:100%;overflow-y:auto;padding-right:0.5rem}
+.ir-table-wrap {
+  height: calc(100vh - 180px);
+}
+
+.ir-column {
+  min-height: 0;
+  overflow-y: auto;
+  padding-right: 0.5rem;
+}
 @media (max-width: 1024px){.ir-table-wrap{max-height:none}.ir-column{height:auto}}
 .ir-animate{animation:fadeInUp .32s ease both}
 

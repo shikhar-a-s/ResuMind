@@ -50,60 +50,68 @@ const interviewReportSchema = z.object({
 
 async function generateInterviewReport({resumeText, selfDescription, jobDescription}) {
 
-const prompt =` Analyze the candidate's resume against the job description as an experienced ATS reviewer and recruiter.
+const prompt =`Analyze the candidate's resume, job description, and self description.
 
 Return ONLY valid JSON.
 
-ATS Score Calculation Process (DO NOT RETURN THESE VALUES):
+ATS SCORING METHODOLOGY
 
-1. Evaluate:
+Calculate ATS Score primarily from the resume itself.
 
-   * Keyword Match (35%)
-   * Required Skills Match (25%)
-   * Relevant Experience Match (20%)
-   * Job Title Alignment (10%)
-   * Education & Certifications (5%)
-   * ATS Readability & Formatting (5%)
+Evaluate:
 
-2. Score each category from 0-100.
+* ATS readability and formatting (15%)
+* Resume structure and organization (10%)
+* Professional experience quality (20%)
+* Quantified achievements and impact (15%)
+* Technical skills presentation (15%)
+* Education and certifications (10%)
+* Keyword optimization and relevance (15%)
 
-3. Calculate:
+Scoring Rules:
 
-ATS Score =
-(Keyword Match × 0.35) +
-(Skills Match × 0.25) +
-(Experience Match × 0.20) +
-(Title Alignment × 0.10) +
-(Education × 0.05) +
-(Formatting × 0.05)
+* ATS score must be an integer between 0 and 100.
+* ATS score should reflect the overall quality and ATS-friendliness of the resume.
+* Do NOT heavily penalize the candidate for not matching the job description.
+* Do NOT increase ATS score based on selfDescription.
+* Use the job description mainly for identifying skill gaps, interview questions, and preparation planning.
+* Use selfDescription only as supporting context for interview preparation recommendations.
+* Scores above 90 should be reserved for exceptionally well-structured and highly impactful resumes.
+* Average resumes should typically score between 60 and 85.
 
-4. Round to nearest integer.
+JOB MATCH ANALYSIS (DO NOT RETURN)
 
-Important Rules:
+Internally compare the resume against the job description to identify:
 
-* Be strict and realistic.
-* Missing required skills should significantly reduce ATS score.
-* Missing preferred skills should moderately reduce ATS score.
-* Do not reward skills not mentioned in the resume.
-* ATS score should resemble what a recruiter or ATS screening tool would assign.
-* If the candidate lacks several core requirements, ATS score should rarely exceed 75.
-* Scores above 90 should only be given when there is exceptional alignment.
+* Missing required skills
+* Missing preferred skills
+* Relevant experience alignment
+* Technical strengths
+* Potential interview focus areas
 
-Return ONLY this structure:
+Use this analysis when generating:
+
+* technicalInterviews
+* behavioralInterviews
+* skillGapAnalysis
+* preparationPlan
+* improvements
+
+OUTPUT FORMAT
 
 {
 "atsScore": 80,
 "technicalInterviews": [
 {
 "questions": "Question",
-"intention": "Reason",
+"intention": "Reason for asking",
 "answers": "Ideal answer"
 }
 ],
 "behavioralInterviews": [
 {
 "questions": "Question",
-"intention": "Reason",
+"intention": "Reason for asking",
 "answers": "Ideal answer"
 }
 ],
@@ -116,35 +124,40 @@ Return ONLY this structure:
 "preparationPlan": [
 {
 "day": 1,
-"focusAreas": "Focus Area",
-"tasks": "Tasks"
+"focusAreas": "Topic",
+"tasks": "Specific preparation tasks"
 }
 ],
 "improvements": [
 {
-"title": "Improvement",
-"description": "Actionable recommendation"
+"title": "Improvement Title",
+"description": "Specific actionable recommendation"
 }
 ],
 "title": "Generate a unique professional report title every time"
 }
 
-Requirements:
+REQUIREMENTS
 
-* Return JSON only
+* Return valid JSON only
 * No markdown
 * No explanations
-* ATS score must be derived from the calculation process above
+* No text outside JSON
 * Exactly 5 technicalInterviews
 * Exactly 5 behavioralInterviews
 * Exactly 5 skillGapAnalysis
-* Exactly 7 preparationPlan days
+* Exactly 7 preparationPlan objects (Days 1-7)
 * At least 5 improvements
 * Every array item must be an object
-* severity must be one of: Low, Medium, High
-* Questions must be tailored to both the job description and the candidate's experience
-* Skill gaps must directly reflect missing or weakly demonstrated requirements
-* Preparation plan must address the identified skill gaps
+* severity must be one of:
+
+  * Low
+  * Medium
+  * High
+* Interview questions must be tailored to both the resume and the job description
+* Skill gaps must be based on missing or weakly demonstrated skills relative to the job description
+* Preparation plan must address identified skill gaps
+* Improvements must focus on increasing ATS score, resume quality, and interview readiness
 
 Job Description:
 ${jobDescription}
