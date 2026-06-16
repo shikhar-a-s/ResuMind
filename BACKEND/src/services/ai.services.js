@@ -60,13 +60,27 @@ Calculate ATS Score primarily from the resume itself.
 
 Evaluate:
 
-* ATS readability and formatting (15%)
-* Resume structure and organization (10%)
-* Professional experience quality (20%)
-* Quantified achievements and impact (15%)
-* Technical skills presentation (15%)
-* Education and certifications (10%)
-* Keyword optimization and relevance (15%)
+ATS SCORING MUST BE STRICT.
+
+For fresh graduates and students:
+- Do not award points simply for listing skills.
+- Do not award points simply for having projects.
+- Projects without measurable impact should receive limited credit.
+- Lack of internships or professional experience should significantly reduce the ATS score.
+- Most student resumes should score between 50 and 75.
+- Scores above 85 should be extremely rare.
+- Scores above 90 should be reserved for resumes that would be competitive at top-tier technology companies.
+
+Before assigning the final ATS score, internally evaluate:
+1. Formatting (15)
+2. Experience (25)
+3. Projects (20)
+4. Skills (15)
+5. Achievements (15)
+6. Keyword Relevance (10)
+
+Sum these categories to produce the final ATS score.
+Return only the final ATS score.
 
 Scoring Rules:
 
