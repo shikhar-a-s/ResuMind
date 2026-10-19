@@ -183,11 +183,14 @@ cd FRONTEND
 npm install
 ```
 
-Create a `.env` file:
+For local development, the Vite dev server forwards `/api` requests to the backend at `http://localhost:3000`; no frontend `.env` file is needed.
+Set `VITE_API_URL` when building the frontend for a non-local backend:
 
 ```env
 VITE_API_URL=http://localhost:3000
 ```
+
+The backend allows requests from the local Vite development server and the deployed frontend.
 
 Start frontend:
 

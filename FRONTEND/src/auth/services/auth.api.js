@@ -1,13 +1,9 @@
 import axios from "axios";
-
-const api = {
-    baseURL: import.meta.env.VITE_API_URL,
-    withCredentials: true
-};
+import { apiConfig } from "./api.config";
 
 export async function register(username,email,password){
     try{
-        const response=await axios.post("/api/auth/register",{email,username,password},api);
+        const response=await axios.post("/api/auth/register",{email,username,password},apiConfig);
         // if backend returns token, store and set Authorization header
         if(response?.data?.token){
             const token = response.data.token;
@@ -23,7 +19,7 @@ export async function register(username,email,password){
 
 export async function login(email,password){
     try{
-        const response=await axios.post("/api/auth/login",{email,password},api);
+        const response=await axios.post("/api/auth/login",{email,password},apiConfig);
         if(response?.data?.token){
             const token = response.data.token;
             localStorage.setItem('token', token);
@@ -37,7 +33,7 @@ export async function login(email,password){
 
 export async function logout(){
     try{
-        const response=await axios.get("/api/auth/logout",api);    
+        const response=await axios.get("/api/auth/logout",apiConfig);
         // clear stored token and Authorization header
         localStorage.removeItem('token');
         delete axios.defaults.headers.common['Authorization'];
@@ -54,7 +50,7 @@ export async function getProfile(){
         if(stored && !axios.defaults.headers.common['Authorization']){
             axios.defaults.headers.common['Authorization'] = `Bearer ${stored}`;
         }
-        const response=await axios.get("/api/auth/getuser",api);
+        const response=await axios.get("/api/auth/getuser",apiConfig);
         return response.data;
     }catch(err){
         // Return a safe value instead of throwing so callers can handle unauthenticated state

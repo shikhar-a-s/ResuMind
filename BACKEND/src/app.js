@@ -11,7 +11,17 @@ const interviewRouter = require('../routes/interview.routes');
 
 app.use(
   cors({
-    origin: "https://resumind-ai-frontend.onrender.com",
+    origin(origin, callback) {
+      const isLocalOrigin = /^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin || '');
+      const isDeployedFrontend = origin === "https://resumind-ai-frontend.onrender.com";
+
+      if (!origin || isLocalOrigin || isDeployedFrontend) {
+        callback(null, true);
+        return;
+      }
+
+      callback(new Error(`Origin ${origin} is not allowed by CORS`));
+    },
     credentials: true,
   })
 );

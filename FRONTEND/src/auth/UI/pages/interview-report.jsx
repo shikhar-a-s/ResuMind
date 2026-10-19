@@ -6,6 +6,7 @@ import { Loader, BarChart3 } from 'lucide-react';
 import HeaderControls from '../components/HeaderControls';
 import './interview-report.css';
 import axios from 'axios';
+import { apiConfig } from '../../services/api.config';
 import { ScrollAnimate } from '../components/ScrollAnimate';
 
 export function InterviewReport() {
@@ -40,7 +41,7 @@ export function InterviewReport() {
         // ignore parse errors and continue to network fetch
       }
       try {
-        const resp = await axios.get('/api/interview/latest', { baseURL:import.meta.env.VITE_API_URL, withCredentials: true });
+        const resp = await axios.get('/api/interview/latest', apiConfig);
         if (!mounted) return;
         // Prefer server response, fall back to persisted report if available
         if (resp.data && resp.data.interviewReport) {

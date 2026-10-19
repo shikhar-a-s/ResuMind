@@ -1,8 +1,5 @@
 import axios from "axios";
-const api = {
-    baseURL: import.meta.env.VITE_API_URL,
-    withCredentials: true
-};
+import { apiConfig } from "./api.config";
 
 export async function generateInterviewReport(resumeFile, selfDescription, jobDescription) {
     try {
@@ -15,7 +12,7 @@ export async function generateInterviewReport(resumeFile, selfDescription, jobDe
             "/api/interview/generate",
             formData,
             {
-                ...api,
+                ...apiConfig,
                 headers: {
                     "Content-Type": "multipart/form-data"
                 }
@@ -47,7 +44,7 @@ export async function generateInterviewReport(resumeFile, selfDescription, jobDe
 export async function deleteInterviewReport(reportId) {
     if (!reportId) throw new Error('Report id is required');
     try {
-        const response = await axios.delete(`/api/interview/${reportId}`, api);
+        const response = await axios.delete(`/api/interview/${reportId}`, apiConfig);
         return response.data;
     } catch (err) {
         throw err.response?.data || err;

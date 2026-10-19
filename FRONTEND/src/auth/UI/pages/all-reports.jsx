@@ -3,6 +3,7 @@ import Protected from '../components/protected';
 import HeaderControls from '../components/HeaderControls';
 import { useAuth } from '../../hooks/useAuth';
 import axios from 'axios';
+import { apiConfig } from '../../services/api.config';
 import {LayoutDashboard, Download, Trash2, CheckCircle} from 'lucide-react';
 import './interview-report.css';
 import { useNavigate } from 'react-router-dom';
@@ -240,10 +241,7 @@ const downloadPDF = () => {
     async function load() {
       // Prefer server-side listing for user's reports
       try {
-        const resp = await axios.get('/api/interview/reports', {
-  baseURL: import.meta.env.VITE_API_URL,
-  withCredentials: true
-});
+        const resp = await axios.get('/api/interview/reports', apiConfig);
         if (!mounted) return;
         const serverReports = resp.data?.reports || [];
         setReports(serverReports);
